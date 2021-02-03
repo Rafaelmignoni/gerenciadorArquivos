@@ -1,0 +1,506 @@
+
+swagger: '2.0'
+info:
+  description: 'Este documento tem como objetivo demonstrar como devem ser realizadas as operações providas pelo Gerenciador de Arquivos. '
+  version: 1.0.0
+  title: Api Gerenciador de Arquivo
+  contact:
+    email: rafaelmignoni@gmail.com
+tags:
+  - name: Sessions
+  - name: Users
+  - name: Groups
+  - name: Members
+  - name: Files
+schemes:
+  - https
+  - http
+paths:
+  /sessions:
+    post:
+      tags:
+        - Sessions
+      summary: 'Gera token de autenticação'
+      description: ''
+      operationId: gerarToken
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: email
+          in: formData
+          description: Email do usuário
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: Senha do usuário
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Token object
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+              token:
+                type: string
+              refreshToken:
+                type: string
+        '401':
+          description: Unauthorized
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Criar usuário
+      description: ''
+      operationId: criarUsuario
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: name
+          in: formData
+          description: Nome do usuário
+          required: true
+          type: string
+        - name: email
+          in: formData
+          description: Email do usuário
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: Senha do usuário
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Token object
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+              token:
+                type: string
+              refreshToken:
+                type: string
+        '401':
+          description: Unauthorized
+  /groups:
+    get:
+      tags:
+        - Groups
+      summary: Listar Todos os Grupos
+      description: ''
+      operationId: listarGrupo
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Group object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                user_id:
+                  type: integer
+                name_slug:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Groups
+      summary: Criar Grupos
+      description: ''
+      operationId: criarGrupo
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: name
+          in: formData
+          description: Nome do grupo
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Group object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                user_id:
+                  type: integer
+                name_slug:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+        '401':
+          description: Unauthorized
+  /groups/{groupId}:
+    put:
+      tags:
+        - Groups
+      summary: Editar Grupos
+      description: ''
+      operationId: editarGrupo
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: "groupId"
+          in: "path"
+          description: "ID do grupo"
+          required: true
+          type: "integer"
+        - name: name
+          in: formData
+          description: Nome do grupo
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Group object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                user_id:
+                  type: integer
+                name_slug:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+        '401':
+          description: Unauthorized
+    get:
+      tags:
+        - Groups
+      summary: Listar Grupo Específico
+      description: ''
+      operationId: listaGrupoEspecifico
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: "groupId"
+          in: "path"
+          description: "ID do grupo"
+          required: true
+          type: "integer"
+      responses:
+        '200':
+          description: Group object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                user_id:
+                  type: integer
+                name_slug:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Groups
+      summary: Deletar Grupo Específico
+      description: ''
+      operationId: deletarGrupoEspecifico
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: "groupId"
+          in: "path"
+          description: "ID do grupo"
+          required: true
+          type: "integer"
+      responses:
+        '200':
+          description: Group object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                user_id:
+                  type: integer
+                name_slug:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+        '401':
+          description: Unauthorized
+  /members:
+    get:
+      tags:
+        - Members
+      summary: Listar Membros
+      description: ''
+      operationId: listarMembro
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: GROUP
+          in: header
+          description: Utilizar o name-slug do grupo
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Member object
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              user_id:
+                type: integer
+              group_id:
+                type: integer
+              created_at:
+                type: string
+              updated_at:
+                type: string
+              user:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  password:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+        '401':
+          description: Unauthorized
+  /files:
+    get:
+      tags:
+        - Files
+      summary: Listar Todos os Arquivos
+      description: ''
+      operationId: listarArquivos
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: GROUP
+          in: header
+          description: Utilizar o name-slug do grupo
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Arquivo object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                file:
+                  type: string
+                name:
+                  type: string
+                group_id:
+                  type: integer
+                type:
+                  type: string
+                subtype:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Files
+      summary: Enviar Arquivos
+      description: ''
+      operationId: enviarGrupo
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: file
+          in: formData
+          type: file
+          description: Arquivo Enviar.
+          required: true
+        - name: GROUP
+          in: header
+          description: Utilizar o name-slug do grupo
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Arquivo object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                file:
+                  type: string
+                name:
+                  type: string
+                group_id:
+                  type: integer
+                type:
+                  type: string
+                subtype:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                id:
+                  type: integer
+        '401':
+          description: Unauthorized
+  /files/{groupId}:
+    get:
+      tags:
+        - Files
+      summary: Listar Arquivo Específico
+      description: ''
+      operationId: listarArquivoEspecifico
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'Usar o access_token gerado na autenticação. Ex: '' Bearer *acess_token* '''
+          required: true
+          type: string
+        - name: "groupId"
+          in: "path"
+          description: "ID do grupo"
+          required: true
+          type: "integer"
+        - name: GROUP
+          in: header
+          description: Utilizar o name-slug do grupo
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Image
+        '401':
+          description: Unauthorized
+

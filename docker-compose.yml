@@ -1,0 +1,46 @@
+version: '3'
+services:
+
+  soluti-database:
+    image: postgres
+    container_name: soluti-database
+    environment:
+      - POSTGRES_PASSWORD=docker
+    ports:
+      - 5432:5432
+    networks:
+      - soluti-network
+    
+
+  soluti-backend:
+    build: ./backend
+    container_name: soluti-backend
+    ports:
+      - 3333:3333
+    depends_on:
+      - soluti-database
+    command: bash -c " dockerize -wait tcp://soluti-database:5432 && adonis migration:run && adonis seed && npm start"
+    networks:
+      - soluti-network
+
+
+  soluti-frontend:
+    build: ./frontend
+    container_name: soluti-frontend
+    ports:
+      - 3000:3000
+    depends_on:
+      - soluti-database
+      - soluti-backend
+    networks:
+      - soluti-network
+
+ 
+    
+   
+networks:
+  soluti-network:
+    driver: bridge
+
+    
+
