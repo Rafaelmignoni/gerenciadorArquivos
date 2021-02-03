@@ -13,3 +13,5 @@ Nele trabalhamos com:
 - Validators
 - Authenticator
 - Swagger: API Documentation
+
+Obs: Uma vez que o sistema se encontra para fins didáticos, o arquivo ".env" foi incluido para facilitar o funcionamento
